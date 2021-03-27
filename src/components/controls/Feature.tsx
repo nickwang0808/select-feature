@@ -6,53 +6,62 @@ interface IProps {
   parentNames: string;
   feature: IFeature;
   setParentTotal: React.Dispatch<React.SetStateAction<number>>;
+  parentTotal: number;
 }
 
 export default function Feature({
   feature,
   parentNames,
   setParentTotal,
+  parentTotal,
 }: IProps) {
   const [total, setTotal] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
 
   const prevTotal = usePrevious(total);
 
-  const fullName = `${parentNames}${parentNames.length ? "-" : ""}${
+  const featureFullName = `${parentNames}${parentNames.length ? "-" : ""}${
     feature.name
   }`;
+
+  const priceWithPossibleDiscount = feature.price
+    ? parentTotal
+      ? feature.price / 2
+      : feature.price
+    : null;
+
+  const componentLevelPrice =
+    total !== 0
+      ? `$${String(total)}`
+      : priceWithPossibleDiscount
+      ? `$${priceWithPossibleDiscount}`
+      : "-";
 
   const handleCheck = ({
     target: { checked },
   }: ChangeEvent<HTMLInputElement>) => {
     setIsChecked(checked);
-    if (checked === false) {
-      setTotal(0);
-    } else {
-      if (feature.price) {
-        setTotal(feature.price);
-      }
-    }
   };
 
   useEffect(() => {
+    if (isChecked === false) {
+      setTotal(0);
+    } else {
+      if (priceWithPossibleDiscount) {
+        setTotal(priceWithPossibleDiscount);
+      }
+    }
+  }, [isChecked]);
+
+  useEffect(() => {
     if (total < prevTotal) {
-      // remove the price
-
+      // remove children total from total
       const diff = prevTotal - total;
-
       setParentTotal((prev) => prev - diff);
     } else {
       setParentTotal((prev) => prev + total - prevTotal);
     }
   }, [total]);
-
-  const componentLevelPrice =
-    total !== 0
-      ? `$${String(total)}`
-      : feature.price
-      ? `$${feature.price}`
-      : "-";
 
   return (
     // remove the margin for the root level
@@ -61,7 +70,7 @@ export default function Feature({
         <input type="checkbox" checked={isChecked} onChange={handleCheck} />
         <span>
           {`${parentNames.length ? "Sub-feature " : "Feature "}`}
-          {fullName}
+          {featureFullName}
         </span>
         <span> ({componentLevelPrice})</span>
       </label>
@@ -73,9 +82,10 @@ export default function Feature({
           return (
             <Feature
               feature={subFeature}
-              parentNames={fullName}
-              key={fullName + index}
+              parentNames={featureFullName}
+              key={featureFullName + index}
               setParentTotal={setTotal}
+              parentTotal={total}
             />
           );
         })}

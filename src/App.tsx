@@ -20,6 +20,7 @@ export default function App() {
               parentNames={""}
               key={`${index}`}
               setParentTotal={setTotal}
+              parentTotal={total}
             />
           );
         })}
