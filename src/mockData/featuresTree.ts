@@ -161,9 +161,4 @@ export const mockFeatures: IFeature[] = [
       },
     ],
   },
-  {
-    name: "D",
-    price: 50,
-    children: null,
-  },
 ];
