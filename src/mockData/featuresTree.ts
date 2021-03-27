@@ -1,44 +1,44 @@
-import { Feature } from "../redux/subPrefSlice";
+import { IFeature } from "../redux/subPrefSlice";
 
-export const mockFeatures: Feature[] = [
+export const mockFeatures: IFeature[] = [
   {
     isChecked: false,
-    name: "Feature A",
+    name: "A",
     value: [
       {
         isChecked: false,
-        name: "Feature A-1",
+        name: "1",
         value: [
           {
             isChecked: false,
-            name: "Feature A-1-1",
+            name: "1",
             value: 50,
           },
         ],
       },
       {
         isChecked: false,
-        name: "Feature A-2",
+        name: "2",
         value: [
           {
             isChecked: false,
-            name: "Feature A-2-1",
+            name: "1",
             value: 50,
           },
           {
             isChecked: false,
-            name: "Feature A-2-1",
+            name: "1",
             value: 20,
           },
         ],
       },
       {
         isChecked: false,
-        name: "Feature A-3",
+        name: "3",
         value: [
           {
             isChecked: false,
-            name: "Feature A-3-1",
+            name: "1",
             value: 50,
           },
         ],
@@ -47,7 +47,7 @@ export const mockFeatures: Feature[] = [
   },
   {
     isChecked: false,
-    name: "Sub-feature B",
+    name: "B",
     value: 50,
   },
 ];
