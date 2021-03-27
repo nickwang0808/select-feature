@@ -67,8 +67,7 @@ export default function Feature({
       </label>
 
       {/* render children recursively, need to use a type guard here, do not put the condition in a variable */}
-      {typeof feature.children !== "number" &&
-        // only render children if parent is checked
+      {!feature.price &&
         isChecked &&
         feature.children?.map((subFeature, index) => {
           return (
