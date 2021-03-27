@@ -1,53 +1,66 @@
-import React, { ChangeEvent, useState } from "react";
-import { IFeature } from "../../redux/subPrefSlice";
+import React, { ChangeEvent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { IAppState } from "../../redux/store";
+import { IFeature, toggleFeature } from "../../redux/subPrefSlice";
 
 interface IProps {
-  parents: string;
+  parentNames: string;
+  position: string;
   feature: IFeature;
 }
 
-export default function Feature({ feature, parents }: IProps) {
-  const [checked, setChecked] = useState(false);
+export default function Feature({ feature, parentNames, position }: IProps) {
+  const { totalPrice, features } = useSelector(
+    ({ subPref }: IAppState) => subPref
+  );
 
-  const handleCheck = (e: ChangeEvent<HTMLInputElement>) =>
-    setChecked(e.target.checked);
+  const fullName = `${parentNames}${parentNames.length ? "-" : ""}${
+    feature.name
+  }`;
 
-  let comp: JSX.Element;
-  if (typeof feature.value === "number") {
-    comp = (
-      <label>
-        <input type="checkbox" checked={checked} onChange={handleCheck} />
-        <span>{`${parents}${parents.length !== 0 ? "-" : ""}${
-          feature.name
-        }`}</span>
-        <span> (${feature.value})</span>
-      </label>
+  const hasPrice = typeof feature.value === "number";
+
+  const dispatch = useDispatch();
+
+  const handleCheck = ({
+    target: { checked },
+  }: ChangeEvent<HTMLInputElement>) =>
+    dispatch(
+      toggleFeature({
+        isCheck: checked,
+        path: position,
+      })
     );
-  } else {
-    comp = (
-      <>
-        <label>
-          <input type="checkbox" checked={checked} onChange={handleCheck} />
-          <span>{`${parents}${parents.length !== 0 ? "-" : ""}${
-            feature.name
-          }`}</span>
-          <span> (-)</span>
-        </label>
-        {feature.value.map((subFeature) => {
+
+  return (
+    // remove the margin for the root level
+    <div className={!parentNames.length ? "" : "margin-left"}>
+      <label>
+        <input
+          type="checkbox"
+          checked={feature.isChecked}
+          onChange={handleCheck}
+        />
+        <span>
+          {`${parentNames.length ? "Sub-feature " : "Feature "}`}
+          {fullName}
+        </span>
+        <span> ({`${hasPrice ? `$${feature.value}` : "-"}`})</span>
+      </label>
+
+      {/* render children recursively, need to use a type guard here, do not put the condition in a variable */}
+      {typeof feature.value !== "number" &&
+        feature.value.map((subFeature, index) => {
+          const childPosition = `${position}.${index}`;
           return (
             <Feature
               feature={subFeature}
-              parents={`${parents}${parents.length !== 0 ? "-" : ""}${
-                feature.name
-              }`}
+              parentNames={fullName}
+              position={childPosition}
+              key={childPosition}
             />
           );
         })}
-      </>
-    );
-  }
-
-  return (
-    <div className={parents.length === 0 ? "" : "margin-left"}>{comp}</div>
+    </div>
   );
 }

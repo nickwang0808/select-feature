@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import set from "lodash.set";
 import { mockFeatures } from "../../mockData/featuresTree";
 
 export interface IFeature {
@@ -15,6 +16,11 @@ interface IState {
   features: IFeature[];
 }
 
+interface ICheckAction {
+  path: string;
+  isCheck: boolean;
+}
+
 const initialState: IState = {
   features: mockFeatures,
   totalPrice: 0,
@@ -24,23 +30,31 @@ const subPrefSlice = createSlice({
   name: "subPref",
   initialState,
   reducers: {
-    checkFeature: (state, action: PayloadAction<string>) => {
-      // check current feature
-      // if feature has sub features, display them
-      // if feature has price, add to global price
-    },
-    uncheckFeature: (state, action: PayloadAction<string>) => {
-      // uncheck current feature
-      // if feature has sub features, display them
-      // if feature has price, add to global price
+    toggleFeature: (state, { payload }: PayloadAction<ICheckAction>) => {
+      state = {
+        ...state,
+        features: setDeepTreeValue(
+          state.features,
+          payload.path,
+          payload.isCheck
+        ),
+      };
     },
   },
 });
 
-function findFeature(features: string[]) {
-  // take a array of feature names and find the feature in the deep nested tree
-  // hint use recursion
+// this function MUTATE objects,it's only meant to run inside a slice with immer
+export function setDeepTreeValue(
+  obj: IState["features"],
+  path: string,
+  value: boolean
+) {
+  const regex = /\./g;
+  const fullPath = path.replace(regex, ".value.").split(".");
+  fullPath.push("isChecked");
+
+  return set(obj, fullPath, value);
 }
 
 export default subPrefSlice.reducer;
-export const {} = subPrefSlice.actions;
+export const { toggleFeature } = subPrefSlice.actions;

@@ -11,7 +11,14 @@ export default function Content() {
   return (
     <div className="content">
       {features.map((feature, index) => {
-        return <Feature feature={feature} parents={""} />;
+        return (
+          <Feature
+            feature={feature}
+            parentNames={""}
+            position={`${index}`}
+            key={`${index}`}
+          />
+        );
       })}
     </div>
   );
