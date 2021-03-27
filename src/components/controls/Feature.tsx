@@ -56,7 +56,8 @@ export default function Feature({
       const diff = prevTotal - total;
       setParentTotal((prev) => prev - diff);
     } else {
-      setParentTotal((prev) => prev + total - prevTotal);
+      const diff = total - prevTotal;
+      setParentTotal((prev) => prev + diff);
     }
   }, [total, prevTotal, setParentTotal]);
 
