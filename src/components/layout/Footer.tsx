@@ -1,12 +1,16 @@
 import React from "react";
 
-export default function Footer() {
+interface IProps {
+  total: number;
+}
+
+export default function Footer({ total }: IProps) {
   return (
     <div>
       <hr />
       <div className="footer-container">
         <div className="pricing">
-          <strong>Total: $0 / mo</strong>
+          <strong>Total: ${total} / mo</strong>
         </div>
         <button className="save-button">Save</button>
       </div>
