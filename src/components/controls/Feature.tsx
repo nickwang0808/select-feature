@@ -50,6 +50,8 @@ export default function Feature({ feature, parentNames, position }: IProps) {
 
       {/* render children recursively, need to use a type guard here, do not put the condition in a variable */}
       {typeof feature.value !== "number" &&
+        // only render children if parent is checked
+        feature.isChecked &&
         feature.value.map((subFeature, index) => {
           const childPosition = `${position}.${index}`;
           return (
