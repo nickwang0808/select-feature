@@ -1,53 +1,169 @@
-import { IFeature } from "../redux/subPrefSlice";
+export interface IFeature {
+  /* assuming the name is unique relative to the current branch and level. We should use Guid on prod 
+  to ensure uniqueness */
+  name: string;
+  // recursive interface, the price can be sub-features or just a price
+  children: IFeature[] | null;
+  price: null | number;
+}
 
+// export const mockFeatures: IFeature[] = [
+//   {
+//     name: "A",
+//     price: 50,
+//   },
+//   {
+//     name: "B",
+//     price: 50,
+//   },
+// ];
 export const mockFeatures: IFeature[] = [
   {
-    isChecked: false,
     name: "A",
-    value: [
+    price: null,
+    children: [
       {
-        isChecked: false,
         name: "1",
-        value: [
+        price: null,
+        children: [
           {
-            isChecked: false,
             name: "1",
-            value: 50,
+            price: 50,
+            children: null,
           },
         ],
       },
       {
-        isChecked: false,
         name: "2",
-        value: [
+        price: null,
+        children: [
           {
-            isChecked: false,
             name: "1",
-            value: 50,
+            price: 30,
+            children: null,
           },
           {
-            isChecked: false,
-            name: "1",
-            value: 20,
+            name: "2",
+            price: 20,
+            children: null,
           },
         ],
       },
       {
-        isChecked: false,
         name: "3",
-        value: [
+        price: null,
+        children: [
           {
-            isChecked: false,
             name: "1",
-            value: 50,
+            price: 50,
+            children: null,
           },
         ],
       },
     ],
   },
   {
-    isChecked: false,
     name: "B",
-    value: 50,
+    price: null,
+    children: [
+      {
+        name: "1",
+        price: null,
+        children: [
+          {
+            name: "1",
+            price: 50,
+            children: null,
+          },
+        ],
+      },
+      {
+        name: "2",
+        price: null,
+        children: [
+          {
+            name: "1",
+            price: 30,
+            children: null,
+          },
+          {
+            name: "2",
+            price: 20,
+            children: null,
+          },
+        ],
+      },
+      {
+        name: "3",
+        price: null,
+        children: [
+          {
+            name: "1",
+            price: 50,
+            children: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "C",
+    price: null,
+    children: [
+      {
+        name: "1",
+        price: null,
+        children: [
+          {
+            name: "1",
+            price: 50,
+            children: null,
+          },
+        ],
+      },
+      {
+        name: "2",
+        price: null,
+        children: [
+          {
+            name: "1",
+            price: null,
+            children: [
+              {
+                name: "1",
+                price: 30,
+                children: null,
+              },
+              {
+                name: "2",
+                price: 30,
+                children: null,
+              },
+            ],
+          },
+          {
+            name: "2",
+            price: 20,
+            children: null,
+          },
+        ],
+      },
+      {
+        name: "3",
+        price: null,
+        children: [
+          {
+            name: "1",
+            price: 50,
+            children: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "D",
+    price: 50,
+    children: null,
   },
 ];

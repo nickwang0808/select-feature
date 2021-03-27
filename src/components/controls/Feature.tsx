@@ -1,65 +1,91 @@
-import React, { ChangeEvent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IAppState } from "../../redux/store";
-import { IFeature, toggleFeature } from "../../redux/subPrefSlice";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { IFeature } from "../../mockData/featuresTree";
+import usePrevious from "../../utilities/usePrevious";
 
 interface IProps {
   parentNames: string;
-  position: string;
   feature: IFeature;
+  setParentTotal: React.Dispatch<React.SetStateAction<number>>;
+  parentTotal: number;
 }
 
-export default function Feature({ feature, parentNames, position }: IProps) {
-  const { totalPrice, features } = useSelector(
-    ({ subPref }: IAppState) => subPref
-  );
+export default function Feature({
+  feature,
+  parentNames,
+  setParentTotal,
+  parentTotal,
+}: IProps) {
+  const [total, setTotal] = useState(0);
+  const [isChecked, setIsChecked] = useState(false);
 
-  const fullName = `${parentNames}${parentNames.length ? "-" : ""}${
+  const prevTotal = usePrevious(total);
+
+  const featureFullName = `${parentNames}${parentNames.length ? "-" : ""}${
     feature.name
   }`;
 
-  const hasPrice = typeof feature.value === "number";
+  const priceWithPossibleDiscount = feature.price
+    ? parentTotal
+      ? feature.price / 2
+      : feature.price
+    : null;
 
-  const dispatch = useDispatch();
+  const componentLevelPrice =
+    total !== 0
+      ? `$${String(total)}`
+      : priceWithPossibleDiscount
+      ? `$${priceWithPossibleDiscount}`
+      : "-";
 
   const handleCheck = ({
     target: { checked },
-  }: ChangeEvent<HTMLInputElement>) =>
-    dispatch(
-      toggleFeature({
-        isCheck: checked,
-        path: position,
-      })
-    );
+  }: ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(checked);
+  };
+
+  useEffect(() => {
+    if (isChecked === false) {
+      setTotal(0);
+    } else {
+      if (priceWithPossibleDiscount) {
+        setTotal(priceWithPossibleDiscount);
+      }
+    }
+  }, [isChecked]);
+
+  useEffect(() => {
+    if (total < prevTotal) {
+      // remove children total from total
+      const diff = prevTotal - total;
+      setParentTotal((prev) => prev - diff);
+    } else {
+      setParentTotal((prev) => prev + total - prevTotal);
+    }
+  }, [total]);
 
   return (
     // remove the margin for the root level
     <div className={!parentNames.length ? "" : "margin-left"}>
       <label>
-        <input
-          type="checkbox"
-          checked={feature.isChecked}
-          onChange={handleCheck}
-        />
+        <input type="checkbox" checked={isChecked} onChange={handleCheck} />
         <span>
           {`${parentNames.length ? "Sub-feature " : "Feature "}`}
-          {fullName}
+          {featureFullName}
         </span>
-        <span> ({`${hasPrice ? `$${feature.value}` : "-"}`})</span>
+        <span> ({componentLevelPrice})</span>
       </label>
 
       {/* render children recursively, need to use a type guard here, do not put the condition in a variable */}
-      {typeof feature.value !== "number" &&
-        // only render children if parent is checked
-        feature.isChecked &&
-        feature.value.map((subFeature, index) => {
-          const childPosition = `${position}.${index}`;
+      {!feature.price &&
+        isChecked &&
+        feature.children?.map((subFeature, index) => {
           return (
             <Feature
               feature={subFeature}
-              parentNames={fullName}
-              position={childPosition}
-              key={childPosition}
+              parentNames={featureFullName}
+              key={featureFullName + index}
+              setParentTotal={setTotal}
+              parentTotal={total}
             />
           );
         })}
