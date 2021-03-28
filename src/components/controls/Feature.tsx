@@ -1,3 +1,4 @@
+import { Checkbox } from "pretty-checkbox-react";
 import React, { useEffect, useState } from "react";
 import { IFeature } from "../../mockData/featuresTree";
 import usePrevious from "../../utilities/usePrevious";
@@ -80,36 +81,35 @@ however, we DO NOT apply discount to self if self is the only one checked, or it
     total !== 0 ? `$${String(total)}` : _price ? `$${_price}` : "-";
 
   return (
-    // remove the margin for the root level
-    <div className={!parentNames.length ? "" : "margin-left"}>
-      <label>
-        <input
-          type="checkbox"
-          checked={isChecked}
-          onChange={({ target }) => setIsChecked(target.checked)}
-        />
-        <span>
-          {`${parentNames.length ? "Sub-feature " : "Feature "}`}
-          {featureFullName}
-        </span>
+    <div className="mx">
+      <Checkbox
+        checked={isChecked}
+        onChange={({ target }) => setIsChecked(target.checked)}
+        animation="smooth"
+        color="info"
+      >
+        {`${parentNames.length ? "Sub-feature " : "Feature "}`}
+        {featureFullName}
         <span> ({priceDisplay})</span>
-      </label>
+      </Checkbox>
 
-      {/* render children recursively, assuming feature with children does not have price */}
-      {!price &&
-        isChecked &&
-        children?.map((subFeature, index) => {
-          return (
-            <Feature
-              feature={subFeature}
-              parentNames={featureFullName}
-              key={featureFullName + index}
-              setParentTotal={setTotal}
-              checkedChildren={_checkedChildren}
-              setCheckedChildren={_setCheckedChildren}
-            />
-          );
-        })}
+      {/* render children recursively, assuming features with children does not have price */}
+      {!price && isChecked && (
+        <div className="indentation">
+          {children?.map((subFeature, index) => {
+            return (
+              <Feature
+                feature={subFeature}
+                parentNames={featureFullName}
+                key={featureFullName + index}
+                setParentTotal={setTotal}
+                checkedChildren={_checkedChildren}
+                setCheckedChildren={_setCheckedChildren}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

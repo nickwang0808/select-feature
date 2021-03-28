@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./App.css";
+import "./App.scss";
 import Feature from "./components/controls/Feature";
 import Content from "./components/layout/Content";
 import Footer from "./components/layout/Footer";

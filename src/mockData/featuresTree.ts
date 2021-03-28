@@ -7,16 +7,6 @@ export interface IFeature {
   price: null | number;
 }
 
-// export const mockFeatures: IFeature[] = [
-//   {
-//     name: "A",
-//     price: 50,
-//   },
-//   {
-//     name: "B",
-//     price: 50,
-//   },
-// ];
 export const mockFeatures: IFeature[] = [
   {
     name: "A",
