@@ -6,7 +6,6 @@ interface IProps {
   parentNames: string;
   feature: IFeature;
   setParentTotal: React.Dispatch<React.SetStateAction<number>>;
-  parentTotal: number;
   checkedChildren: string[];
   setCheckedChildren: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -15,7 +14,6 @@ export default function Feature({
   feature: { children, name, price },
   parentNames,
   setParentTotal,
-  parentTotal,
   checkedChildren,
   setCheckedChildren,
 }: IProps) {
@@ -107,7 +105,6 @@ however, we DO NOT apply discount to self if self is the only one checked, or it
               parentNames={featureFullName}
               key={featureFullName + index}
               setParentTotal={setTotal}
-              parentTotal={total}
               checkedChildren={_checkedChildren}
               setCheckedChildren={_setCheckedChildren}
             />
