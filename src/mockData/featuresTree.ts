@@ -39,12 +39,12 @@ export const mockFeatures: IFeature[] = [
         children: [
           {
             name: "1",
-            price: 30,
+            price: 50,
             children: null,
           },
           {
             name: "2",
-            price: 20,
+            price: 50,
             children: null,
           },
         ],
@@ -83,12 +83,12 @@ export const mockFeatures: IFeature[] = [
         children: [
           {
             name: "1",
-            price: 30,
+            price: 50,
             children: null,
           },
           {
             name: "2",
-            price: 20,
+            price: 50,
             children: null,
           },
         ],
@@ -131,19 +131,19 @@ export const mockFeatures: IFeature[] = [
             children: [
               {
                 name: "1",
-                price: 30,
+                price: 50,
                 children: null,
               },
               {
                 name: "2",
-                price: 30,
+                price: 50,
                 children: null,
               },
             ],
           },
           {
             name: "2",
-            price: 20,
+            price: 50,
             children: null,
           },
         ],

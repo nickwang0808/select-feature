@@ -21,6 +21,8 @@ export default function App() {
               key={`${index}`}
               setParentTotal={setTotal}
               parentTotal={total}
+              checkedChildren={[]}
+              setCheckedChildren={() => {}}
             />
           );
         })}
