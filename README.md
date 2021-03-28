@@ -28,6 +28,6 @@ Initially, I went with checking whether the parent has a `total` more than 0 to 
 
 So I added a local `_price` state to make my life easier on updating the price. I also added an `_checkedChildren` state array to keep track of which children are already checked, this state is exclusively used by child components. So when there is parent's `checkedChildren`'s length is more than 0, we start to determine discount.
 
-Now `checkedChilren` not empty, we simply need to check if the current feature is the first element in it. If true, we don't apply the discount, and if false, we apply the discount.
+Now `checkedChildren` is not empty, we simply need to check if the current feature is the first element in it. If true, we don't apply the discount, and if false, we apply the discount.
 
 And finally, we need to reset the price if none of the above is true.
