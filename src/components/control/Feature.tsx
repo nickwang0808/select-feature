@@ -27,22 +27,17 @@ export default function Feature({
 
   const prevTotal = usePrevious(total);
 
-  /* We use checkedChildren in parent to keep track of who checked, we apply discount when there are more than 1 checked,
-however, we DO NOT apply discount to self if self is the only one checked, or it's the first one being checked */
+  /* We use checkedChildren in parent to keep track of who checked, we apply discount self is not the first one checked */
   useEffect(() => {
     if (price) {
-      const { length } = checkedChildren;
-      if (length > 0) {
-        if (length === 1 && isChecked) {
-          return _setPrice(price);
-          // if self is the first one being checked, no discount is applied to self at all
-        } else if (checkedChildren.indexOf(name) === 0) {
+      if (checkedChildren.length > 0) {
+        if (checkedChildren[0] === name) {
           return _setPrice(price);
         } else {
           _setPrice(price / 2);
         }
       } else {
-        /* this this to undo discount */
+        /* undo discount */
         _setPrice(price);
       }
     }
