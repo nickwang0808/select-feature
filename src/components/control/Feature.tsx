@@ -30,14 +30,10 @@ export default function Feature({
   /* We use checkedChildren in parent to keep track of who checked, we apply discount self is not the first one checked */
   useEffect(() => {
     if (price) {
-      if (checkedChildren.length > 0) {
-        if (checkedChildren[0] === name) {
-          return _setPrice(price);
-        } else {
-          _setPrice(price / 2);
-        }
+      if (checkedChildren.length && checkedChildren[0] !== name) {
+        _setPrice(price / 2);
       } else {
-        /* undo discount */
+        // un-sets the discount, from discounted price
         _setPrice(price);
       }
     }
