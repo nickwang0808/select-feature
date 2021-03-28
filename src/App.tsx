@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.scss";
-import Feature from "./components/controls/Feature";
+import Feature from "./components/control/Feature";
 import Content from "./components/layout/Content";
 import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
